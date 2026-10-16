@@ -1,70 +1,210 @@
-# Current deployment: <a href="http://34.39.114.116/index2.html" target="_blank">ShareWise.com</a>
+# ShareWise ♻️
 
-ShareWise is a web-based platform that connects schools with organisations willing to donate surplus tech supplies that would otherwise be destroyed/end up in landfills.
+ShareWise is a web platform that connects schools in need of IT equipment with organisations that have surplus devices to donate. Instead of ending up in landfill, working laptops, monitors and keyboards go to classrooms that actually need them.
 
-# 🚀 Full CI/CD Pipeline and Cloud Deployment Project
+I built this project with my team at the end of the Full-Stack Software Development programme at **La Fosse Academy** (London, 2025). The brief was to deliver a complete end-to-end web application using only the technologies we had learned on the course.
 
-This project demonstrates the complete end-to-end deployment of a containerized application using a modern DevOps toolchain. It covers everything from continuous integration to provisioning infrastructure and automating deployments in the cloud.
+> Original team repository: [ShaunMadziva/project-sharewise](https://github.com/ShaunMadziva/project-sharewise)
 
-## 📌 Project Overview
+<!-- 
+-->
 
-The goal of this project was to build a scalable, secure, and automated infrastructure for a web application using best practices in Cloud & DevOps. It simulates a real-world production environment with a full CI/CD pipeline and cloud hosting using AWS.
+---
 
-## 🧱 Architecture
+## The problem
 
-![ShareWise Architecture](./Client/sharewise_architecture.png "Diagram showing the ShareWise CI/CD and cloud deployment architecture. The workflow starts with a developer pushing code to GitHub, which triggers Jenkins for CI/CD. Jenkins builds Docker images and pushes them to Docker Hub. Terraform provisions AWS infrastructure, including a VPC with public and private subnets. The public subnet hosts API servers on EC2 instances, and the private subnet hosts a database server on EC2. Ansible pulls Docker images from Docker Hub and deploys containers to EC2 instances. An AWS Elastic Load Balancer distributes traffic to the API servers, making the public website accessible. The diagram includes logos for GitHub, Jenkins, Docker, Docker Hub, Terraform, Ansible, AWS EC2, and AWS ELB. The overall tone is technical and professional, illustrating a modern DevOps pipeline.")
+From a list of possible project ideas, we chose donations, and as a team we designed the whole concept around it. We noticed two problems:
 
-- **Code Repository**: GitHub
-- **CI/CD Automation**: Jenkins
-- **Containerization**: Docker
-- **Image Registry**: Docker Hub
-- **Infrastructure as Code (IaC)**: Terraform
-- **Configuration Management**: Ansible
-- **Cloud Provider**: AWS
+1. **E-waste.** Companies replace devices that still work, and many of them are destroyed or thrown away.
+2. **Donations that don't match the need.** When there's no central place to communicate, schools often receive too much of what they don't need and too little of what they do.
 
-### 🔧 AWS Architecture
+There wasn't a simple, transparent place where schools and donors could talk to each other, so we built one.
 
-- **VPC with Subnets**
-  - Public Subnet: Hosts API servers (EC2 instances)
-  - Private Subnet: Hosts database servers (EC2 instance)
-- **Elastic Load Balancer (ELB)**: Routes traffic to the API instances
-- **EC2 Instances**: Used for API and Database layers
+## Our solution
 
-## ⚙️ Workflow
+ShareWise turns donating into a **request → donation → notification** workflow:
 
-1. **Code Push**: Developer pushes code to GitHub
-2. **CI Trigger**: Jenkins is triggered and:
-   - Builds the Docker image
-   - Pushes the image to Docker Hub
-3. **Infrastructure Provisioning**: Terraform sets up AWS resources
-4. **Deployment**: Ansible pulls the Docker image from Docker Hub and deploys the containers to EC2 instances
-5. **Traffic Management**: ELB distributes traffic across API instances
+- **Schools post requests** for exactly the items and quantities they need.
+- **Donors browse open requests** and donate towards them, fully or in part. A donor can't give more than was requested, which prevents over-donation.
+- **Each request tracks its progress.** The fulfilled quantity is updated with every donation, and the status moves from *pending* to *partially fulfilled* to *fulfilled*.
+- **The school is notified** whenever one of its requests is fulfilled or partly fulfilled.
+- **Each side has its own dashboard** showing its activity, with a chart summarising the items requested or donated.
 
-## 📦 Tools & Technologies
+## Features
 
-| Category                 | Tool / Service      |
-| ------------------------ | ------------------- |
-| Version Control          | GitHub              |
-| CI/CD                    | Jenkins             |
-| Containerization         | Docker              |
-| Image Registry           | Docker Hub          |
-| IaC                      | Terraform           |
-| Configuration Management | Ansible             |
-| Cloud Provider           | AWS (EC2, ELB, VPC) |
+- Separate sign-up and login for **schools** and **donors**
+- **School dashboard:** profile, my requests (requested vs fulfilled quantity, status, date), a notification centre with an unread badge, mark-as-read and delete, and a chart of requested items
+- **Donor dashboard:** profile, donation history and a chart of donated items
+- **Donation form:** lists all open and partly fulfilled requests, and validates the quantity and description before submitting
+- **Request form** for schools to post new needs
+- **E-waste impact section** on the landing page, with data visualisations of what discarded devices are made of (see below)
 
-## 🌐 Outcome
+## Tech stack
 
-- Fully automated build, test, and deployment pipeline
-- Infrastructure created and managed as code
-- Decoupled architecture with scalability and security in mind
-- Hands-on experience with DevOps tools in a real-world scenario
+| Layer | Technologies |
+| --- | --- |
+| Front end | HTML, CSS, vanilla JavaScript, Bootstrap 5 |
+| Data visualisation | Plotly.js, PapaParse, Chart.js |
+| Back end | Node.js, Express 5, REST API |
+| Database | PostgreSQL |
+| Authentication | bcrypt, JSON Web Tokens (JWT) |
+| Testing | Jest, jsdom, Supertest |
+| DevOps | Docker, Jenkins, Terraform, Ansible, AWS (EC2, ELB, VPC) |
 
-## 🚀 Getting Started
+---
 
-To test or deploy the project:
+## My role
 
-1. Clone the repository
-2. Update AWS credentials and backend config in `terraform/`
-3. Run `terraform apply` to provision infrastructure
-4. Trigger Jenkins pipeline manually or via GitHub push
-5. Use Ansible to deploy containers to provisioned EC2 instances
+I was a **software developer** on the team, and I built:
+
+### 1. The front end
+
+I designed and built every page of the UI, working from the business requirements we defined together as a team:
+
+- landing page, login and registration (with a school/donor switch), school and donor dashboards, donation form, request form and contact page
+- the styling and layout with Bootstrap 5 and custom CSS
+- all the client-side logic in vanilla JavaScript: rendering tables dynamically, form validation, the notification badge and logout
+
+### 2. Connecting the front end to the back end
+
+I connected the web-pages to the Express REST API using `fetch`:
+
+- the login flow: sending credentials, storing the JWT and user details after a successful login, and sending the token in the `Authorization` header to protected routes
+- reading the user's ID from the token so each dashboard loads only that school's or donor's data
+- the full donation flow, from loading open requests to submitting a donation, and the notification actions (mark as read, delete)
+
+### 3. Database design and data workflow
+
+I designed the PostgreSQL schema and the logic of how information moves through the app:
+
+| Table | What it stores |
+| --- | --- |
+| `school` / `donor` | The two types of user account |
+| `request` | What a school needs: item, quantity, fulfilled quantity, status, date |
+| `donation` | How much a donor gives towards a specific request |
+| `notification` | Updates sent to a school about its requests |
+
+The tables are linked with foreign keys (`ON DELETE CASCADE`), so a donation always belongs to a donor and a request, and a notification always belongs to a school and a request. I also wrote the sample data and the setup script that creates the database.
+
+### 4. Data visualisation: e-waste impact
+
+After the first five weeks of the bootcamp, I specialised in **data analysis**: gathering, cleaning, manipulating and visualising data. I brought that into ShareWise with the **"About Us & Our Impact"** section on the landing page, which shows why reusing devices matters:
+
+- **The dataset:** I put together a CSV (`Client/Datasets.csv`) with the material composition of common IT devices (laptops, mice, keyboards, GPUs, and LCD/LED and CRT monitors) across six categories: plastics, metals (aluminium, copper, iron), circuit boards, glass, batteries and hazardous materials, and precious metals.
+- **Loading and cleaning:** the CSV is parsed in the browser with **PapaParse**. Missing values (`N/A`) are converted to 0 so the charts don't break.
+- **Chart 1, "Material Composition by Device":** a **stacked bar chart** (Plotly) showing what each device is made of. For example, about 55% of an LCD monitor is glass, while a GPU is mostly metal and circuit boards.
+- **Chart 2, "Average Material Composition Across All Devices":** a **pie chart** with the average share of each material, calculated in JavaScript across all devices.
+
+Both charts are responsive. The point is to show visitors that every device sent to landfill is full of plastics, metals and even precious metals that could still be used.
+
+I also built the **dashboard charts** (Chart.js bar charts) that show each school how many of each item it has requested, and each donor how many of each item they have donated. They use aggregated data from the API, where quantities are grouped and summed by item.
+
+### 5. Testing
+
+I wrote front-end unit tests with **Jest** and **jsdom** for the login, registration, donation form, request form and donor dashboard scripts. They check that forms switch correctly, that the right API calls are made, that the token is saved after login and that errors are handled. `fetch` and `localStorage` are mocked. I also tested the main user flows manually.
+
+### 6. Supporting the team
+
+I helped my teammates debug and build parts of the back end (API routes, middleware and controllers), although I didn't lead that work. The back-end authentication (bcrypt password hashing and JWT generation and verification) and the deployment pipeline were built by my teammates.
+
+---
+
+## How it works
+
+```
+Browser (HTML + JS)  ──fetch / JSON──▶  Express REST API  ──SQL──▶  PostgreSQL
+        │                                       │
+        └── JWT saved after login ──────────────┘ (sent in the Authorization header)
+```
+
+When a donor donates towards a request, the API:
+
+1. records the **donation**,
+2. updates the **request**'s fulfilled quantity and status,
+3. creates a **notification** for the school.
+
+### Main API endpoints
+
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| POST | `/users/schoolsignup` · `/users/donorsignup` | Register |
+| POST | `/users/schoollogin` · `/users/donorlogin` | Log in and receive a JWT |
+| GET | `/requests` · `/requests/school/:schoolId` | All requests, or one school's requests |
+| POST | `/requests` 🔒 | Create a request |
+| POST | `/fulfill-donation` | Donate towards a request |
+| GET | `/fulfill-donation/:schoolId` 🔒 | A school's notifications |
+| GET | `/donations/donor/:donorId` | A donor's donations |
+| GET | `/requests/school/:id/processed` · `/donations/donor/:id/processed` | Aggregated data for the dashboard charts |
+
+🔒 = requires a valid JWT
+
+## Running it locally
+
+**You'll need:** Node.js 18+ and PostgreSQL.
+
+1. **Clone and install**
+   ```bash
+   git clone https://github.com/<your-username>/sharewise.git
+   cd sharewise
+   npm install
+   cd sharewise-api && npm install && cd ..
+   ```
+
+2. **Create a `.env` file in the project root** for the database setup:
+   ```env
+   DB_USER=postgres
+   DB_PASSWORD=your_password
+   DB_HOST=localhost
+   DB_NAME=sharewise
+   DB_PORT=5432
+   ```
+
+3. **Create the tables and sample data** from the project root:
+   ```bash
+   npm run setup-db
+   ```
+
+4. **Create `sharewise-api/.env`** and start the API (http://localhost:3000):
+   ```env
+   DB_URL=postgresql://postgres:your_password@localhost:5432/sharewise
+   SECRET_TOKEN=any_long_random_string
+   BCRYPT_SALT_ROUNDS=10
+   PORT=3000
+   ```
+   ```bash
+   cd sharewise-api
+   npm run dev
+   ```
+
+5. **Serve the front end** and open `index2.html`:
+   ```bash
+   npx serve Client
+   ```
+   Register a new school or donor to log in. The sample accounts in `setup.sql` use placeholder passwords.
+
+## Tests
+
+```bash
+cd Client && npm install && npx jest          # front-end tests
+cd sharewise-api && npx jest                  # API tests
+npm run coverage                              # coverage report
+```
+
+## Deployment
+
+My teammates also built a full CI/CD pipeline and cloud deployment. **Jenkins** builds the Docker images and pushes them to **Docker Hub**. **Terraform** provisions the AWS infrastructure: a VPC with a public subnet for the API servers and a private subnet for the database. **Ansible** deploys the containers to EC2, and an **Elastic Load Balancer** spreads traffic across the API instances.
+
+![ShareWise architecture](Client/sharewise_architecture.png)
+
+## What I'd improve next
+
+- Move the API URL into a config file instead of hard-coding `localhost:3000`
+- Seed the sample accounts with real bcrypt hashes so they can be used for demos
+- Validate donations against the *remaining* quantity of a request, not the total
+- Exclude rows with no data (such as "Others") when calculating the average material composition
+- Add a shared navigation bar and make the dashboards fully responsive on mobile
+
+
+Built together at La Fosse Academy. Thanks to my teammates for a great collaboration!
+
+— *Anamaria Sandu*
