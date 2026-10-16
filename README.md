@@ -87,7 +87,7 @@ The tables are linked with foreign keys (`ON DELETE CASCADE`), so a donation alw
 
 After the first five weeks of the bootcamp, I specialised in **data analysis**: gathering, cleaning, manipulating and visualising data. I brought that into ShareWise with the **"About Us & Our Impact"** section on the landing page, which shows why reusing devices matters:
 
-- **The dataset:** I researched and selected a public dataset on the material composition of common IT devices (laptops, mice, keyboards, GPUs, and LCD/LED and CRT monitors) across six categories: plastics, metals (aluminium, copper, iron), circuit boards, glass, batteries and hazardous materials, and precious metals. I prepared it as a CSV (`Client/Datasets.csv`) for the website. *Source: [dataset name](link)*
+- **The dataset:** I researched and selected a public dataset on the material composition of common IT devices (laptops, mice, keyboards, GPUs, and LCD/LED and CRT monitors) across six categories: plastics, metals (aluminium, copper, iron), circuit boards, glass, batteries and hazardous materials, and precious metals. I prepared it as a CSV (`Client/Datasets.csv`) for the website. 
 - **Loading and cleaning:** the CSV is parsed in the browser with **PapaParse**. Missing values (`N/A`) are converted to 0 so the charts don't break.
 - **Chart 1, "Material Composition by Device":** a **stacked bar chart** (Plotly) showing what each device is made of. For example, about 55% of an LCD monitor is glass, while a GPU is mostly metal and circuit boards.
 - **Chart 2, "Average Material Composition Across All Devices":** a **pie chart** with the average share of each material, calculated in JavaScript across all devices.
