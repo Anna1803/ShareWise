@@ -86,6 +86,7 @@ I designed the PostgreSQL schema and the logic of how information moves through 
 | `request` | What a school needs: item, quantity, fulfilled quantity, status, date |
 | `donation` | How much a donor gives towards a specific request |
 | `notification` | Updates sent to a school about its requests |
+<img width="801" height="658" alt="db schema" src="https://github.com/user-attachments/assets/3216a0ac-3620-45a9-980b-223305cd7313" />
 
 The tables are linked with foreign keys (`ON DELETE CASCADE`), so a donation always belongs to a donor and a request, and a notification always belongs to a school and a request. I also wrote the sample data and the setup script that creates the database.
 
