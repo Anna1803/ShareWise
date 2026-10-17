@@ -16,6 +16,7 @@ From a list of possible project ideas, we chose donations, and as a team we desi
 2. **Donations that don't match the need.** When there's no central place to communicate, schools often receive too much of what they don't need and too little of what they do.
 
 There wasn't a simple, transparent place where schools and donors could talk to each other, so we built one.
+<img width="1317" height="892" alt="home" src="https://github.com/user-attachments/assets/ecf1aaaf-6e53-4d09-bee5-527344780786" />
 
 ## Our solution
 
@@ -26,6 +27,11 @@ ShareWise turns donating into a **request → donation → notification** workfl
 - **Each request tracks its progress.** The fulfilled quantity is updated with every donation, and the status moves from *pending* to *partially fulfilled* to *fulfilled*.
 - **The school is notified** whenever one of its requests is fulfilled or partly fulfilled.
 - **Each side has its own dashboard** showing its activity, with a chart summarising the items requested or donated.
+
+<img width="1471" height="810" alt="school_req" src="https://github.com/user-attachments/assets/e218058d-399d-45e1-a6ed-a41c651e2c96" />
+<img width="1607" height="592" alt="donations" src="https://github.com/user-attachments/assets/a0d6d6df-4e33-488e-983c-6a919736c69e" />
+<img width="1705" height="837" alt="donor dash" src="https://github.com/user-attachments/assets/8d7a7793-d93e-430c-b90d-687a8e2fa936" />
+<img width="1645" height="647" alt="notifications school" src="https://github.com/user-attachments/assets/76b22fad-d661-48f7-9453-dc63f7400a14" />
 
 ## Features
 
@@ -91,6 +97,7 @@ After the first five weeks of the bootcamp, I specialised in **data analysis**: 
 - **Loading and cleaning:** the CSV is parsed in the browser with **PapaParse**. Missing values (`N/A`) are converted to 0 so the charts don't break.
 - **Chart 1, "Material Composition by Device":** a **stacked bar chart** (Plotly) showing what each device is made of. For example, about 55% of an LCD monitor is glass, while a GPU is mostly metal and circuit boards.
 - **Chart 2, "Average Material Composition Across All Devices":** a **pie chart** with the average share of each material, calculated in JavaScript across all devices.
+<img width="1292" height="668" alt="about us" src="https://github.com/user-attachments/assets/273dd374-c3d6-4d28-8517-6bda3f9df7b3" />
 
 Both charts are responsive. The point is to show visitors that every device sent to landfill is full of plastics, metals and even precious metals that could still be used.
 
